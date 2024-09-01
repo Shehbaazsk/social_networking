@@ -47,4 +47,4 @@ class FriendRequest(models.Model):
         unique_together = ("sender", "receiver")
 
     def __str__(self):
-        return f"{self.sender.email} -> {self.receiver.username} ({self.status})"
+        return f"{self.sender.email} -> {self.receiver.email} ({self.status})"

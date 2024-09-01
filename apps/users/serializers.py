@@ -30,7 +30,3 @@ class UserRegisterSerializers(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
-
-
-class SendFriendRequestSerializer(serializers.Serializer):
-    receiver = serializers.UUIDField()
