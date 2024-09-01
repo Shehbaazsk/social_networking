@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "f6c54aab-9c06-4e5c-bee0-6bd4b1678018",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29626746"
+	},
+	"item": [
+		{
+			"name": "send-friend-request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI1MjE2NjM0LCJpYXQiOjE3MjUxMzAyMzQsImp0aSI6ImQzMjhkZmYzOGQ1NzQxODRiMTM1OWM4ZDQ2ZDcwM2YwIiwidXNlcl91dWlkIjoiNGI0MDBjNTEtYzJmNC00YzI1LWE0OWUtMjU0ZWE1NDA5ZWNjIn0.0A8JO3B9rhmCotZHHDQYmtMqUA5qRh82RflQEu_aK-k"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "receiver_uuid",
+							"value": "28873f1a-9308-4d5b-a60b-181cde99d384",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/users/send-friend-request/"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "shehbaaz@yopmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/users/login/"
+			},
+			"response": []
+		},
+		{
+			"name": "register user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "shehbaaz@yopmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "password2",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/users/register/"
+			},
+			"response": []
+		},
+		{
+			"name": "respond-friend-request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/users/respond-friend-request/"
+			},
+			"response": []
+		},
+		{
+			"name": "list-friends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI1MjY5NDczLCJpYXQiOjE3MjUxODMwNzMsImp0aSI6IjM5NjkxYTIyZjJhOTRiMTFhZTkzYWM4NjJjOTMyYmNkIiwidXNlcl91dWlkIjoiOGRkM2ZmOGMtZmY2OC00Njk0LThmM2UtNmMxNzZmZmM5YmJmIn0.ogAEhESieBpH05Mu_gHp6LeQUxX8B8RbqTU0Ze2p3A0"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/users/list-friends"
+			},
+			"response": []
+		},
+		{
+			"name": "list-pending-request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "search-user",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
