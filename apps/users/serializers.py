@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.users.models import User
+from apps.users.models import FriendRequest, User
 
 
 class UserRegisterSerializers(serializers.ModelSerializer):
@@ -30,3 +30,23 @@ class UserRegisterSerializers(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+
+class FriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["uuid", "email", "first_name", "last_name"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["uuid", "email", "first_name", "last_name"]
+
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(read_only=True)
+
+    class Meta:
+        model = FriendRequest
+        fields = ["uuid", "sender"]

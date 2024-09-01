@@ -9,8 +9,12 @@ from apps.users.api.service import (
     reject_friend_request,
     send_friend_request,
 )
-from apps.users.models import FriendRequest, User
-from apps.users.serializers import UserRegisterSerializers
+from apps.users.models import FriendRequest, FriendRequestStatus, User
+from apps.users.serializers import (
+    FriendRequestSerializer,
+    FriendSerializer,
+    UserRegisterSerializers,
+)
 
 
 class UserRegisterAPIView(GenericAPIView):
@@ -81,15 +85,11 @@ class RespondFriendRequestView(GenericAPIView):
             action = request.data.get("action")
 
             if action == "accept":
-                accept_friend_request(friend_request)
-                return Response(
-                    {"status": "friend request accepted"}, status=status.HTTP_200_OK
-                )
+                response = accept_friend_request(request.user, friend_request)
+                return response
             elif action == "reject":
-                reject_friend_request(friend_request)
-                return Response(
-                    {"status": "friend request rejected"}, status=status.HTTP_200_OK
-                )
+                response = reject_friend_request(request.user, friend_request)
+                return response
             else:
                 return Response(
                     {"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST
@@ -100,6 +100,41 @@ class RespondFriendRequestView(GenericAPIView):
                 {"error": "Friend Request Not Found"}, status=status.HTTP_404_NOT_FOUND
             )
 
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class ListFriendsApiView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FriendSerializer
+
+    def get(self, request, *args, **kwargs):
+        try:
+            friends = request.user.friends.all()
+
+            data = self.serializer_class(friends, many=True).data
+            return Response(data)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class ListPendingFirendRequest(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FriendRequestSerializer
+
+    def get(self, request, *args, **kwargs):
+        try:
+            pending_request = FriendRequest.objects.filter(
+                receiver=request.user, status=FriendRequestStatus.PENDING
+            ).all()
+            data = self.serializer_class(pending_request, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
                 {"error": str(e)},

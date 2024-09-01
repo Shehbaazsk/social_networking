@@ -11,7 +11,9 @@ class User(AbstractUser, CommonModel):
     email = models.EmailField(unique=True, null=False, blank=False)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    friends = models.ManyToManyField("self", through="FriendRequest", symmetrical=False)
+    friends = models.ManyToManyField(
+        "self", related_name="friend_set", blank=True, symmetrical=False
+    )
 
     # add more field
 
@@ -30,7 +32,7 @@ class FriendRequestStatus(models.TextChoices):
     REJECTED = "rejected", _("Rejected")
 
 
-class FriendRequest(models.Model):
+class FriendRequest(CommonModel):
     sender = models.ForeignKey(
         "User", related_name="sent_requests", on_delete=models.CASCADE
     )

@@ -1,3 +1,6 @@
+from rest_framework import status
+from rest_framework.response import Response
+
 from apps.users.models import FriendRequest, FriendRequestStatus
 
 
@@ -21,17 +24,30 @@ def send_friend_request(sender, receiver):
 
 def accept_friend_request(current_user, friend_request):
     if friend_request.receiver == current_user:
-        friend_request.status = FriendRequestStatus.ACCEPTED
-        friend_request.save()
-        current_user.friends.add(friend_request.sender)
-        friend_request.sender.friends.add(current_user)
+        if friend_request.status != FriendRequestStatus.ACCEPTED:
+            friend_request.status = FriendRequestStatus.ACCEPTED
+            friend_request.save()
+            current_user.friends.add(friend_request.sender)
+            friend_request.sender.friends.add(current_user)
+            return Response(
+                {"status": "friend request accepted"}, status=status.HTTP_200_OK
+            )
+        else:
+            return Response({"message": "Friend request already accepted"})
     else:
-        raise ValueError("You cannot accept a friend request that not send to you.")
+        return Response(
+            {"message": "You cannot accept a friend request that not send to you."}
+        )
 
 
 def reject_friend_request(current_user, friend_request):
     if friend_request.receiver == current_user:
         friend_request.status = FriendRequestStatus.REJECTED
         friend_request.save()
+        return Response(
+            {"status": "friend request rejected"}, status=status.HTTP_200_OK
+        )
     else:
-        raise ValueError("You cannot reject a friend request that not send to you.")
+        return Response(
+            {"message": "You cannot reject a friend request that not send to you."}
+        )
