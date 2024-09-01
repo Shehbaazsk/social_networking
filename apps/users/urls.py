@@ -5,6 +5,7 @@ from apps.users.api.api_views import (
     ListFriendsApiView,
     ListPendingFirendRequest,
     RespondFriendRequestView,
+    SearchUserAPIView,
     SendFriendRequestAPIView,
     UserRegisterAPIView,
 )
@@ -31,4 +32,5 @@ urlpatterns = [
         ListPendingFirendRequest.as_view(),
         name="list-pending-request",
     ),
+    path("search/", SearchUserAPIView.as_view(), name="search"),
 ]

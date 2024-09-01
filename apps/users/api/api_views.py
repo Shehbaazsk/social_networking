@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
@@ -14,6 +15,7 @@ from apps.users.serializers import (
     FriendRequestSerializer,
     FriendSerializer,
     UserRegisterSerializers,
+    UserSerializer,
 )
 
 
@@ -135,6 +137,32 @@ class ListPendingFirendRequest(GenericAPIView):
             ).all()
             data = self.serializer_class(pending_request, many=True).data
             return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class SearchUserAPIView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    pagination_class = PageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+        try:
+            search_by = request.query_params.get("search_by", None)
+            query = User.objects.filter(is_delete=False, is_active=True)
+            if search_by:
+                if "@" in search_by:
+                    query = query.filter(email__iexact=search_by.lower())
+                else:
+                    query = query.filter(first_name__icontains=search_by)
+            paginator = self.pagination_class()
+            users = paginator.paginate_queryset(query, request)
+            data = self.serializer_class(users, many=True).data
+            return paginator.get_paginated_response(data)
+
         except Exception as e:
             return Response(
                 {"error": str(e)},

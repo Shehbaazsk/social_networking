@@ -176,6 +176,8 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "send-friend-request": "3/min",
     },
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
 }
 
 
